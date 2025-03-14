@@ -238,14 +238,14 @@ def parse_document(file_path):
             return extract_text_from_pdf(file_path)
         elif file_ext in ('.docx', '.doc'):
             # Parse Word document
-            doc = docx.Document(file_path)
-            full_text = []
-            
-            for para in doc.paragraphs:
-                if para.text.strip():  # Only add non-empty paragraphs
-                    full_text.append(para.text)
-            
-            return '\n'.join(full_text)
+        doc = docx.Document(file_path)
+        full_text = []
+        
+        for para in doc.paragraphs:
+            if para.text.strip():  # Only add non-empty paragraphs
+                full_text.append(para.text)
+        
+        return '\n'.join(full_text)
         else:
             raise ValueError("File must be a Word document (.doc or .docx) or a PDF (.pdf)")
     
