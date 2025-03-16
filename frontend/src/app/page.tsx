@@ -1,10 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { Tab } from '@headlessui/react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { useDropzone } from 'react-dropzone';
-import { motion } from 'framer-motion';
-import { DocumentTextIcon, DocumentArrowUpIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
+import { TypeAnimation } from 'react-type-animation';
+import { Upload, FileText, CheckCircle, AlertCircle } from 'lucide-react';
 
 export default function Home() {
   const [text, setText] = useState('');
@@ -39,7 +43,7 @@ export default function Home() {
           setError(data.error || 'Failed to process file');
         }
       } catch (err) {
-        setError('Failed to process file' +err);
+        setError('Failed to process file');
       } finally {
         setLoading(false);
       }
@@ -82,7 +86,7 @@ export default function Home() {
         setError(data.error || 'Failed to generate document');
       }
     } catch (err) {
-      setError('Failed to generate document' + err);
+      setError('Failed to generate document');
     } finally {
       setLoading(false);
     }
@@ -98,102 +102,59 @@ export default function Home() {
   };
 
   return (
-    <div className="py-10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center">
-          <motion.h1 
-            className="text-4xl font-bold text-gray-900 mb-2"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+    <div className="min-h-screen bg-white">
+      {/* Header */}
+      <header className="border-b">
+        <div className="container mx-auto px-4 h-16 flex items-center">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="flex items-center space-x-2"
           >
-            Document Formatter
-          </motion.h1>
-          <motion.p 
-            className="text-lg text-gray-600 mb-8"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-          >
-            Transform your documents with professional formatting
-          </motion.p>
+            <div className="font-bold text-xl text-blue-600">Cybergen-Doc</div>
+          </motion.div>
         </div>
+      </header>
 
+      <main className="container mx-auto px-4 py-8">
+        {/* About Section with Text Animation */}
         <motion.div
-          className="bg-white rounded-2xl shadow-xl overflow-hidden"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+          className="mb-12 max-w-2xl mx-auto text-center"
         >
-          <Tab.Group>
-            <Tab.List className="flex p-1 space-x-1 bg-blue-900/5">
-              <Tab className={({ selected }) =>
-                `w-full py-3 text-sm font-medium leading-5 rounded-lg transition-all duration-200
-                ${selected 
-                  ? 'bg-white text-blue-700 shadow'
-                  : 'text-gray-600 hover:bg-white/[0.12] hover:text-blue-600'
-                }`
-              }>
-                <div className="flex items-center justify-center space-x-2">
-                  <DocumentTextIcon className="w-5 h-5" />
-                  <span>Enter Text</span>
-                </div>
-              </Tab>
-              <Tab className={({ selected }) =>
-                `w-full py-3 text-sm font-medium leading-5 rounded-lg transition-all duration-200
-                ${selected 
-                  ? 'bg-white text-blue-700 shadow'
-                  : 'text-gray-600 hover:bg-white/[0.12] hover:text-blue-600'
-                }`
-              }>
-                <div className="flex items-center justify-center space-x-2">
-                  <DocumentArrowUpIcon className="w-5 h-5" />
-                  <span>Import Document</span>
-                </div>
-              </Tab>
-            </Tab.List>
-            <Tab.Panels className="p-6">
-              <Tab.Panel>
-                <form onSubmit={handleTextSubmit} className="space-y-4">
-                  <div>
-                    <label htmlFor="text" className="block text-sm font-medium text-gray-700 mb-1">
-                      Document Text
-                    </label>
-                    <textarea
-                      id="text"
-                      value={text}
-                      onChange={(e) => setText(e.target.value)}
-                      className="w-full h-64 p-4 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="Enter your document text here..."
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="filename" className="block text-sm font-medium text-gray-700 mb-1">
-                      Output Filename
-                    </label>
-                    <input
-                      id="filename"
-                      type="text"
-                      value={filename}
-                      onChange={(e) => setFilename(e.target.value)}
-                      className="w-full p-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="generated_document.docx"
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className={`w-full py-3 rounded-lg text-white font-medium transition-all duration-200
-                      ${loading 
-                        ? 'bg-blue-400 cursor-not-allowed'
-                        : 'bg-blue-600 hover:bg-blue-700'
-                      }`}
-                  >
-                    {loading ? 'Generating...' : 'Generate Document'}
-                  </button>
-                </form>
-              </Tab.Panel>
-              <Tab.Panel>
+          <TypeAnimation
+            sequence={[
+              'Transform your documents with professional formatting',
+              1000,
+              'Automatic heading detection and smart date formatting',
+              1000,
+              'Preserve tables and images with consistent styling',
+              1000,
+            ]}
+            wrapper="h2"
+            speed={50}
+            className="text-2xl font-semibold text-gray-800 mb-4"
+            repeat={Infinity}
+          />
+        </motion.div>
+
+        {/* Main Content */}
+        <div className="max-w-4xl mx-auto">
+          <Tabs defaultValue="import" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 mb-8">
+              <TabsTrigger value="import" className="flex items-center space-x-2">
+                <Upload className="w-4 h-4" />
+                <span>Import Document</span>
+              </TabsTrigger>
+              <TabsTrigger value="text" className="flex items-center space-x-2">
+                <FileText className="w-4 h-4" />
+                <span>Enter Text</span>
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="import">
+              <div className="space-y-6">
                 <div
                   {...getRootProps()}
                   className={`border-2 border-dashed rounded-lg p-8 text-center transition-all duration-200
@@ -203,7 +164,7 @@ export default function Home() {
                     }`}
                 >
                   <input {...getInputProps()} />
-                  <DocumentArrowUpIcon className="w-12 h-12 mx-auto text-gray-400 mb-4" />
+                  <Upload className="w-12 h-12 mx-auto text-gray-400 mb-4" />
                   <p className="text-gray-600">
                     {isDragActive
                       ? "Drop your file here..."
@@ -213,61 +174,97 @@ export default function Home() {
                     Supported formats: .docx, .pdf
                   </p>
                 </div>
-              </Tab.Panel>
-            </Tab.Panels>
-          </Tab.Group>
-        </motion.div>
+                <Input
+                  placeholder="Output filename (optional)"
+                  value={filename}
+                  onChange={(e) => setFilename(e.target.value)}
+                  className="max-w-sm"
+                />
+                <Button
+                  onClick={() => setLoading(true)}
+                  disabled={loading}
+                  className="w-full"
+                >
+                  {loading ? 'Processing...' : 'Generate Document'}
+                </Button>
+              </div>
+            </TabsContent>
 
-        {(error || success) && (
-          <motion.div
-            className={`mt-4 p-4 rounded-lg flex items-center space-x-2
-              ${error ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}`}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            {success ? (
-              <CheckCircleIcon className="w-5 h-5 text-green-500" />
-            ) : null}
-            <span>{error || 'Document generated successfully!'}</span>
-          </motion.div>
-        )}
+            <TabsContent value="text">
+              <form onSubmit={handleTextSubmit} className="space-y-6">
+                <Textarea
+                  value={text}
+                  onChange={(e) => setText(e.target.value)}
+                  placeholder="Enter your document text here..."
+                  className="min-h-[300px]"
+                />
+                <Input
+                  placeholder="Output filename (optional)"
+                  value={filename}
+                  onChange={(e) => setFilename(e.target.value)}
+                  className="max-w-sm"
+                />
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full"
+                >
+                  {loading ? 'Processing...' : 'Generate Document'}
+                </Button>
+              </form>
+            </TabsContent>
+          </Tabs>
 
-        <div className="mt-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Features</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Status Messages */}
+          <AnimatePresence>
+            {(error || success) && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                className={`mt-4 p-4 rounded-lg flex items-center space-x-2
+                  ${error ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}`}
+              >
+                {success ? (
+                  <CheckCircle className="w-5 h-5 text-green-500" />
+                ) : (
+                  <AlertCircle className="w-5 h-5 text-red-500" />
+                )}
+                <span>{error || 'Document generated successfully!'}</span>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Features Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
             {[
               {
                 title: 'Smart Formatting',
-                description: 'Automatic detection and formatting of headings, subheadings, and paragraphs',
+                description: 'Automatic detection of headings, subheadings, and paragraphs',
               },
               {
                 title: 'Date Handling',
-                description: 'Intelligent date detection and standardization to a professional format',
+                description: 'Intelligent date detection and standardization',
               },
               {
                 title: 'Content Preservation',
-                description: 'Maintains tables, images, and complex formatting from source documents',
+                description: 'Maintains tables, images, and complex formatting',
               },
             ].map((feature, index) => (
               <motion.div
-                key={index}
-                className="bg-white p-6 rounded-lg shadow-sm"
+                key={feature.title}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 * index }}
+                transition={{ delay: index * 0.1 }}
+                className="bg-blue-50 p-6 rounded-lg"
               >
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  {feature.title}
-                </h3>
-                <p className="text-gray-600">
-                  {feature.description}
-                </p>
+                <h3 className="font-semibold text-blue-900 mb-2">{feature.title}</h3>
+                <p className="text-blue-700 text-sm">{feature.description}</p>
               </motion.div>
             ))}
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
