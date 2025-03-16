@@ -47,8 +47,14 @@ def main():
         st.info("""
         Note: 
         - Text detected as headings will be automatically formatted with center alignment, bold, underline, and 14pt font.
+        - Subheadings (typically found after headings or with specific formats) will be formatted with center alignment, bold, underline, and 13pt font.
+        - Regular paragraphs will have left alignment and 12.5pt font with pure black color (#000000).
         - All paragraphs will have proper spacing after them.
         - Headings will be kept with the following text to prevent page breaks between them.
+        - **Date Handling**: If a date is detected in your document (e.g., "16/06/24" or "Date: 16/06/24"), 
+          it will be extracted, formatted to "Jun 16, 2024" format, and placed at the top right of the document.
+        - The original date line will be completely removed from the document.
+        - No date will be added if none is found in your text.
         """)
         
         # Text input area
@@ -76,10 +82,13 @@ def main():
                         st.success(f"Document successfully created!")
                         st.markdown(get_download_link(document_path, "Download Document"), unsafe_allow_html=True)
                         st.info("""
-                        Note: 
-                        - Text has been formatted according to heading detection rules.
-                        - All paragraphs have standard spacing after them.
-                        - Headings are kept with their following paragraphs across page breaks.
+                        The document has been formatted according to the following rules:
+                        - Headings have center alignment, bold, underline, and 14pt font
+                        - Subheadings have center alignment, bold, underline, and 13pt font (1pt smaller than headings)
+                        - Regular paragraphs have left alignment and 12.5pt pure black font (#000000)
+                        - If a date was found, it has been formatted and placed at the top right
+                        - The original date line has been completely removed from the document content
+                        - Tables and images from Word documents are preserved
                         """)
                     else:
                         st.error("Error creating document. Please try again.")
@@ -88,6 +97,26 @@ def main():
     
     elif option == "Import Document":
         st.header("Import Document")
+        
+        # Instructions for import
+        st.info("""
+        Upload a Word or PDF document to reformat it with consistent styling.
+        
+        **Formatting**:
+        - Headings will be formatted with center alignment, bold, underline, and 14pt font
+        - Subheadings will be formatted with center alignment, bold, underline, and 13pt font (1pt smaller)
+        - Regular paragraphs will have left alignment and 12.5pt pure black font
+        
+        **Date Handling**: 
+        - If a date is detected in your document (e.g., "16/06/24" or "Date: 16/06/24"), 
+          it will be extracted, formatted to "Jun 16, 2024" format, and placed at the top right of the document.
+        - The original date line will be completely removed from the document.
+        - No date will be added if none is found in your document.
+        
+        **Tables and Images**:
+        - Tables and images in Word documents (.docx/.doc) will be preserved in the formatted document.
+        - For PDF files, tables and images cannot be preserved in the same way due to format limitations.
+        """)
         
         # File uploader
         uploaded_file = st.file_uploader("Choose a Word or PDF document", type=["docx", "doc", "pdf"])
@@ -130,10 +159,13 @@ def main():
                         st.success(f"Document successfully created!")
                         st.markdown(get_download_link(document_path, "Download Document"), unsafe_allow_html=True)
                         st.info("""
-                        Note: 
-                        - Text has been formatted according to heading detection rules.
-                        - All paragraphs have standard spacing after them.
-                        - Headings are kept with their following paragraphs across page breaks.
+                        The document has been formatted according to the following rules:
+                        - Headings have center alignment, bold, underline, and 14pt font
+                        - Subheadings have center alignment, bold, underline, and 13pt font (1pt smaller than headings)
+                        - Regular paragraphs have left alignment and 12.5pt pure black font (#000000)
+                        - If a date was found, it has been formatted and placed at the top right
+                        - The original date line has been completely removed from the document content
+                        - Tables and images from Word documents are preserved
                         """)
                     else:
                         st.error("Error creating document. Please try again.")
