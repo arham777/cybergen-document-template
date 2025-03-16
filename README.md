@@ -1,115 +1,87 @@
 # CyberGen Document Formatter
 
-A Streamlit web application for generating properly formatted documents using the CyberGen template.
+A professional document formatting tool that automatically formats documents with consistent styling, detects headings, and handles dates.
 
 ## Features
 
-- Generate formatted documents with consistent styling
-- Direct text input option
-- Import existing Word (.docx/.doc) or PDF files
-- Automatic heading and subheading detection and formatting
-- Proper paragraph spacing and pagination
-- Intelligent date detection and formatting
-- Preservation of tables and images from Word documents
-- Document download functionality
+- **Smart Formatting**: Automatic detection and formatting of headings, subheadings, and paragraphs
+- **Date Handling**: Intelligent date detection and standardization to a professional format
+- **Content Preservation**: Maintains tables, images, and complex formatting from source documents
 
-## Requirements
+## Project Structure
 
-- Python 3.6+
-- Streamlit
-- python-docx
-- PyPDF2
-- base64
-- tempfile
-- os
+- `frontend/`: Next.js frontend application
+- `api.py`: FastAPI backend for document processing
+- `cybergen_template.py`: Core document formatting logic
+- `cybergen-template.docx`: Template document for formatting
 
-## Installation
+## Development Setup
 
-1. Clone the repository:
+### Prerequisites
+
+- Python 3.8+
+- Node.js 16+
+- npm or yarn
+
+### Installation
+
+1. Install Python dependencies:
+   ```
+   pip install -r requirements.txt
+   ```
+
+2. Install frontend dependencies:
+   ```
+   cd frontend
+   npm install
+   ```
+
+### Running Locally
+
+For Windows:
 ```
-git clone <repository-url>
-cd document-formatting
-```
-
-2. Install the required dependencies:
-```
-pip install -r requirements.txt
-```
-
-3. Make sure you have the template file `cybergen-template.docx` in the same directory as the app.py file.
-
-## Usage
-
-1. Run the Streamlit app:
-```
-streamlit run app.py
+dev.bat
 ```
 
-2. Open your browser and go to the URL displayed in the terminal (usually http://localhost:8501)
+For Unix/Mac:
+```
+# Terminal 1
+python api.py
 
-3. Use the sidebar to choose one of the following options:
-   - **Enter Text Directly**: Type your document content in the text area
-   - **Import Document**: Upload an existing Word or PDF document
+# Terminal 2
+cd frontend
+npm run dev
+```
 
-4. Specify an output filename (optional)
+The application will be available at:
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:8000
 
-5. Click "Generate Document" to process and create the formatted document
+## Deployment to Vercel
 
-6. Download the generated document using the provided download link
+1. Install Vercel CLI:
+   ```
+   npm install -g vercel
+   ```
 
-## How It Works
+2. Login to Vercel:
+   ```
+   vercel login
+   ```
 
-The app uses the following components:
+3. Deploy:
+   ```
+   vercel
+   ```
 
-- `cybergen_template.py`: Contains the core document processing logic
-- `app.py`: Streamlit interface for the document formatter
-- `cybergen-template.docx`: Template file for document generation
+4. Set environment variables in Vercel dashboard:
+   - `NEXT_PUBLIC_API_URL`: Leave empty for production (API and frontend are on the same domain)
 
-### Formatting Rules
+## API Endpoints
 
-The document formatting follows these rules:
+- `POST /api/generate-from-text`: Generate a document from text input
+- `POST /api/generate-from-file`: Generate a document from an uploaded file (DOCX or PDF)
 
-#### Text Formatting
-- Main headings are formatted with center alignment, bold, underline, and 14pt font
-- Subheadings are formatted with center alignment, bold, underline, and 13pt font (1pt smaller than main headings)
-- Regular paragraphs are formatted with left alignment (not justified) and 12.5pt font in pure black color (#000000)
-- All paragraphs have proper spacing after them
-- Headings and subheadings are kept with the following text to prevent page breaks between them
+## License
 
-#### Heading & Subheading Detection
-The system intelligently identifies:
-- **Main headings** based on text characteristics (all caps, ending with colon, numbered, etc.)
-- **Subheadings** based on:
-  - Position (appearing shortly after a main heading)
-  - Format (indented or using hierarchical numbering like "1.1", "1.2", etc.)
-  - Starting with common subheading prefixes like "subsection", "part", etc.
-  - Using bullet points or specific formatting
-
-#### Date Handling
-- The system detects dates in various formats including:
-  - DD/MM/YY (e.g., "16/06/24")
-  - DD/MM/YYYY (e.g., "16/06/2024")
-  - "Date: DD/MM/YY" or "Date: DD/MM/YYYY"
-  - Month DD, YYYY (e.g., "June 16, 2024" or "Jun 16, 2024")
-  - DD Month YYYY (e.g., "16 June 2024" or "16 Jun 2024")
-  - YYYY-MM-DD (e.g., "2024-06-16")
-- When a date is detected, it is:
-  1. Extracted from the document
-  2. Formatted to "MMM DD, YYYY" format (e.g., "Jun 16, 2024")
-  3. Placed at the top right of the first page
-  4. The original date line is completely removed from the document content
-- If no date is found in the document, no date will be added
-
-#### Tables and Images
-- Tables from Word documents (.docx/.doc) are preserved in the formatted document:
-  - Table structure (rows and columns) is maintained
-  - Cell content is formatted with the same rules as regular text
-  - Table styles are preserved when possible
-- Images from Word documents are also preserved in the generated document
-- For PDF files, tables and images cannot be preserved in the same way due to format limitations
-
-## Notes
-
-- The template file `cybergen-template.docx` must be present in the same directory as the app
-- For PDF imports, text extraction may not preserve all formatting from the original document
-- Word documents (.docx/.doc) will better preserve original formatting, tables, and images during import 
+MIT 
